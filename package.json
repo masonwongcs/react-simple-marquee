@@ -1,0 +1,33 @@
+{
+  "name": "react-simple-marquee",
+  "version": "1.1.0",
+  "description": "Marquee build with React and CSS animation",
+  "main": "./build/index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [
+    "marquee",
+    "simple",
+    "react"
+  ],
+  "author": "masonwongcs",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.13.1"
+  },
+  "prepublish": "tsc",
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-function-bind": "^7.8.3",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/preset-stage-0": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.3.0",
+    "style-loader": "^1.0.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
