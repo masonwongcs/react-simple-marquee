@@ -1,8 +1,9 @@
 import { CSSProperties, ComponentType } from 'react'
 
-declare module Marquee {
-  export default ComponentType<{
-    speed: number
-    style?: CSSProperties
-  }>
+interface MarqueeProps {
+  speed: number;
+  style?: CSSProperties
 }
+declare const Marquee: ComponentType<MarqueeProps>
+
+export default Marquee
