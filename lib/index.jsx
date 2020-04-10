@@ -36,6 +36,9 @@ class Marquee extends React.Component {
     document.querySelector("head").append(dynamicStyle);
   }
 
+  mouseOutHandler = function() {this.style.animationPlayState = "running"};
+  mouseInHandler = function() {this.style.animationPlayState = "paused"};
+
   marqueeRun = () => {
     const { speed } = this.props;
     const marqueeSpeed = speed || 1;
@@ -46,17 +49,17 @@ class Marquee extends React.Component {
       20) /
       marqueeSpeed}ms linear infinite`;
 
-    this.textWrapper.current.addEventListener("mouseenter", function() {
-      this.style.animationPlayState = "paused";
-    });
-
-    this.textWrapper.current.addEventListener("mouseleave", function() {
-      this.style.animationPlayState = "running";
-    });
+    this.textWrapper.current.addEventListener("mouseenter", this.mouseInHandler);
+    this.textWrapper.current.addEventListener("mouseleave", this.mouseOutHandler);
   };
 
   componentDidMount() {
     this.marqueeRun();
+  }
+
+  componentWillUnmount() {
+    this.textWrapper.current.removeEventListener("mouseenter", this.mouseInHandler);
+    this.textWrapper.current.removeEventListener("mouseleave", this.mouseOutHandler);
   }
 
   render() {
