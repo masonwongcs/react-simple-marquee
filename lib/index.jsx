@@ -1,5 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const dynamicStyle = document.createElement("style");
 dynamicStyle.type = "text/css";
@@ -24,102 +25,87 @@ let keyFrames = `
   }
 `;
 
-class Marquee extends React.Component {
-  constructor(props) {
-    super(props);
-    this.textElem = React.createRef();
-    this.textWrapper = React.createRef();
-    this.state = {
-      marqueeOn: true
-    };
+const Marquee = ({ speed, style, children })=>{
+  const textElem = useRef(null);
+  const textWrapper = useRef(null);
+  const [animationPlayState, setAnimationPlayState] = useState(undefined)
+  const [animation, setAnimation] = useState(undefined)
+  useEffect(()=>{
     document.querySelector("head").append(dynamicStyle);
-  }
+    marqueeRun();
+    window.addEventListener("resize", marqueeRun);
+    return ()=> {
+      textWrapper.current.removeEventListener(
+        "mouseenter",
+        mouseInHandler
+      );
+      textWrapper.current.removeEventListener(
+        "mouseleave",
+        mouseOutHandler
+      );
+      window.removeEventListener("resize", marqueeRun)
+    }
+  }, []);
 
-  mouseOutHandler = function() {
-    this.style.animationPlayState = "running";
-  };
-  mouseInHandler = function() {
-    this.style.animationPlayState = "paused";
-  };
+  const mouseOutHandler = useCallback(function() {
+    setAnimationPlayState('running');
+  }, []);
+  const mouseInHandler = useCallback(function() {
+    setAnimationPlayState('paused');
+  }, []);
 
-  removeAllEventListener = () => {
-    this.textWrapper.current.removeEventListener(
-      "mouseenter",
-      this.mouseInHandler
-    );
-    this.textWrapper.current.removeEventListener(
-      "mouseleave",
-      this.mouseOutHandler
-    );
-  };
-
-  marqueeRun = () => {
-    const { speed } = this.props;
+  const marqueeRun = useCallback(() => {
     const marqueeSpeed = speed || 1;
-    const textElemWidth = this.textElem.current.clientWidth;
+    const textElemWidth = textElem.current.clientWidth;
     const width = textElemWidth + 40;
     dynamicStyle.innerHTML = keyFrames.replace(/DYNAMIC_VALUE/g, `-${width}px`);
-    this.textWrapper.current.style.animation = `dynamicMarqueeAnimation ${(width *
+    setAnimation(`dynamicMarqueeAnimation ${(width *
       20) /
-      marqueeSpeed}ms linear infinite`;
+    marqueeSpeed}ms linear infinite`)
 
-    this.textWrapper.current.addEventListener(
+    textWrapper.current.addEventListener(
       "mouseenter",
-      this.mouseInHandler
+      mouseInHandler
     );
-    this.textWrapper.current.addEventListener(
+    textWrapper.current.addEventListener(
       "mouseleave",
-      this.mouseOutHandler
+      mouseOutHandler
     );
-  };
+  }, [speed]);
 
-  componentDidMount() {
-    this.marqueeRun();
-    window.addEventListener("resize", this.marqueeRun);
-  }
-
-  componentWillUnmount() {
-    this.removeAllEventListener();
-    window.removeEventListener("resize", this.marqueeRun);
-  }
-
-  render() {
-    const { children, style } = this.props;
-    return (
-      <div style={{ overflow: "hidden", ...style }}>
+  return (
+    <div style={{ overflow: "hidden", ...style }}>
+      <div
+        className="text-wrapper"
+        style={{ whiteSpace: "nowrap", willChange: "transform", animationPlayState, animation }}
+        ref={textWrapper}
+      >
         <div
-          className="text-wrapper"
-          style={{ whiteSpace: "nowrap", willChange: "transform" }}
-          ref={this.textWrapper}
+          className="text-elem"
+          style={{
+            minWidth: "100%",
+            display: "inline-block",
+            marginRight: 40,
+            boxSizing: "border-box"
+          }}
+          ref={textElem}
         >
-          <div
-            className="text-elem"
-            style={{
-              minWidth: "100%",
-              display: "inline-block",
-              marginRight: 40,
-              boxSizing: "border-box"
-            }}
-            ref={this.textElem}
-          >
-            {children}
-          </div>
-          <div
-            className="text-elem"
-            style={{
-              minWidth: "100%",
-              display: "inline-block",
-              marginRight: 40,
-              boxSizing: "border-box"
-            }}
-            ref={this.textElem}
-          >
-            {children}
-          </div>
+          {children}
+        </div>
+        <div
+          className="text-elem"
+          style={{
+            minWidth: "100%",
+            display: "inline-block",
+            marginRight: 40,
+            boxSizing: "border-box"
+          }}
+        >
+          {children}
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 Marquee.propTypes = {
