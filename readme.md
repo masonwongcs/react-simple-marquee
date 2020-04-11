@@ -7,6 +7,11 @@ A very simple Marquee component created by using CSS animation and React
 - [Installation](#installation)
 - [Usage](#usage)
 
+## Demo
+![](demo.gif)
+
+Link to demo: https://react-simple-marquee.surge.sh
+
 ## Installation
 
 ```sh
