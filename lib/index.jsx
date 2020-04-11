@@ -32,12 +32,26 @@ class Marquee extends React.Component {
     this.state = {
       marqueeOn: true
     };
-
     document.querySelector("head").append(dynamicStyle);
   }
 
-  mouseOutHandler = function() {this.style.animationPlayState = "running"};
-  mouseInHandler = function() {this.style.animationPlayState = "paused"};
+  mouseOutHandler = function() {
+    this.style.animationPlayState = "running";
+  };
+  mouseInHandler = function() {
+    this.style.animationPlayState = "paused";
+  };
+
+  removeAllEventListener = () => {
+    this.textWrapper.current.removeEventListener(
+      "mouseenter",
+      this.mouseInHandler
+    );
+    this.textWrapper.current.removeEventListener(
+      "mouseleave",
+      this.mouseOutHandler
+    );
+  };
 
   marqueeRun = () => {
     const { speed } = this.props;
@@ -49,17 +63,24 @@ class Marquee extends React.Component {
       20) /
       marqueeSpeed}ms linear infinite`;
 
-    this.textWrapper.current.addEventListener("mouseenter", this.mouseInHandler);
-    this.textWrapper.current.addEventListener("mouseleave", this.mouseOutHandler);
+    this.textWrapper.current.addEventListener(
+      "mouseenter",
+      this.mouseInHandler
+    );
+    this.textWrapper.current.addEventListener(
+      "mouseleave",
+      this.mouseOutHandler
+    );
   };
 
   componentDidMount() {
     this.marqueeRun();
+    window.addEventListener("resize", this.marqueeRun);
   }
 
   componentWillUnmount() {
-    this.textWrapper.current.removeEventListener("mouseenter", this.mouseInHandler);
-    this.textWrapper.current.removeEventListener("mouseleave", this.mouseOutHandler);
+    this.removeAllEventListener();
+    window.removeEventListener("resize", this.marqueeRun);
   }
 
   render() {
