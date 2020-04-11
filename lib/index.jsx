@@ -1,6 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import {useCallback, useEffect, useRef, useState} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const dynamicStyle = document.createElement("style");
 dynamicStyle.type = "text/css";
@@ -25,7 +25,7 @@ let keyFrames = `
   }
 `;
 
-const Marquee = ({speed, style, children})=>{
+const Marquee = ({ speed, style, children })=>{
   const textElem = useRef(null);
   const textWrapper = useRef(null);
   const [animationPlayState, setAnimationPlayState] = useState(undefined)
