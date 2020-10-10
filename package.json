@@ -1,6 +1,6 @@
 {
   "name": "react-simple-marquee",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Marquee build with React and CSS animation",
   "main": "./build/index.js",
   "scripts": {
@@ -12,6 +12,23 @@
     "react"
   ],
   "author": "masonwongcs",
+  "contributors": [
+    {
+      "name": "Mason Wong",
+      "email": "masonwongcs@gmail.com",
+      "url": "https://masonwongcs.github.io"
+    },
+    {
+      "name": "Yapi",
+      "email": "yapi.tw@gmail.com",
+      "url": "http://yapi.surge.sh"
+    },
+    {
+      "name": "Kevin Kam",
+      "email": "k040691@icloud.com",
+      "url": "https://kevinkam.github.io/"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "prop-types": "^15.7.2",
