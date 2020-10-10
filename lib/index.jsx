@@ -1,10 +1,17 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import { useAnimationPlayState, useAnimationDuration } from "./hooks";
+import {
+  useAnimationPlayState,
+  useAnimationDuration,
+  VERTICAL_VALUE,
+} from "./hooks";
 
-const Marquee = ({ speed, style, children }) => {
+const Marquee = ({ speed, direction = "right-left", style, children }) => {
   const { textWrapper, animationPlayState } = useAnimationPlayState();
-  const { textElem, animationDuration } = useAnimationDuration(speed);
+  const { textElem, animationDuration } = useAnimationDuration(
+    speed,
+    direction
+  );
   return (
     <div style={{ overflow: "hidden", ...style }}>
       <div
@@ -23,8 +30,11 @@ const Marquee = ({ speed, style, children }) => {
         <div
           className="text-elem"
           style={{
-            minWidth: "100%",
-            display: "inline-block",
+            minWidth: VERTICAL_VALUE.includes(direction) ? undefined : "100%",
+            minHeight: VERTICAL_VALUE.includes(direction) ? "100%" : undefined,
+            display: VERTICAL_VALUE.includes(direction)
+              ? "block"
+              : "inline-block",
             marginRight: 40,
             boxSizing: "border-box",
           }}
@@ -35,8 +45,11 @@ const Marquee = ({ speed, style, children }) => {
         <div
           className="text-elem"
           style={{
-            minWidth: "100%",
-            display: "inline-block",
+            minWidth: VERTICAL_VALUE.includes(direction) ? undefined : "100%",
+            minHeight: VERTICAL_VALUE.includes(direction) ? "100%" : undefined,
+            display: VERTICAL_VALUE.includes(direction)
+              ? "block"
+              : "inline-block",
             marginRight: 40,
             boxSizing: "border-box",
           }}
@@ -50,6 +63,12 @@ const Marquee = ({ speed, style, children }) => {
 
 Marquee.propTypes = {
   speed: PropTypes.number,
+  direction: PropTypes.oneOf([
+    "left-right",
+    "right-left",
+    "top-bottom",
+    "bottom-top",
+  ]),
   children: PropTypes.string.isRequired,
   style: PropTypes.object,
 };

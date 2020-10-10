@@ -1,9 +1,10 @@
-import { CSSProperties, ComponentType } from 'react'
+import { CSSProperties, ComponentType } from "react";
 
 interface MarqueeProps {
   speed?: number;
-  style?: CSSProperties
+  style?: CSSProperties;
+  direction?: "left-right" | "right-left" | "top-bottom" | "bottom-top";
 }
-declare const Marquee: ComponentType<MarqueeProps>
+declare const Marquee: ComponentType<MarqueeProps>;
 
-export default Marquee
+export default Marquee;
