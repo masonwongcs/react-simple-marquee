@@ -8,7 +8,7 @@ import {
 
 const Marquee = ({ speed, direction = "right-left", style, children }) => {
   const { textWrapper, animationPlayState } = useAnimationPlayState();
-  const { textElem, animationDuration } = useAnimationDuration(
+  const { textElem, animationDuration, animationName } = useAnimationDuration(
     speed,
     direction
   );
@@ -17,11 +17,14 @@ const Marquee = ({ speed, direction = "right-left", style, children }) => {
       <div
         className="text-wrapper"
         style={{
-          whiteSpace: "nowrap",
+          whiteSpace:
+            direction !== "right-left" && direction !== "left-right"
+              ? "normal"
+              : "nowrap",
           willChange: "transform",
-          animationName: "dynamicMarqueeAnimation",
           animationTimingFunction: "linear",
           animationIterationCount: "infinite",
+          animationName,
           animationPlayState,
           animationDuration,
         }}
