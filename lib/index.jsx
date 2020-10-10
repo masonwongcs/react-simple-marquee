@@ -17,7 +17,10 @@ const Marquee = ({ speed, direction = "right-left", style, children }) => {
       <div
         className="text-wrapper"
         style={{
-          whiteSpace: "nowrap",
+          whiteSpace:
+            direction !== "right-left" && direction !== "left-right"
+              ? "normal"
+              : "nowrap",
           willChange: "transform",
           animationTimingFunction: "linear",
           animationIterationCount: "infinite",
