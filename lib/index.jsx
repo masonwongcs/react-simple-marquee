@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 let generateCSS = ({ time, direction }) => {
   return `
@@ -91,12 +91,11 @@ let generateCSS = ({ time, direction }) => {
 };
 
 function Marquee({ speed = 2, direction = "right-left", style, children }) {
-  const marqueeRef = React.createRef();
+  const marqueeRef = useRef();
   const isVertical = direction === "top-bottom" || direction === "bottom-top";
 
   useEffect(() => {
     let dynamicStyle;
-    this.prevMarquee = marqueeRef.current;
     const isVertical = direction === "top-bottom" || direction === "bottom-top";
     const displacement = isVertical
       ? marqueeRef.current.getBoundingClientRect().height
