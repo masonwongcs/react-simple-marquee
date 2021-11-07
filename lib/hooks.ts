@@ -4,8 +4,8 @@ export const NEGATIVE_VALUE = ["right-left", "bottom-top"];
 export const VERTICAL_VALUE = ["top-bottom", "bottom-top"];
 
 export const useAnimationPlayState = () => {
-  const textWrapper = useRef(null);
-  const [animationPlayState, setAnimationPlayState] = useState(undefined);
+  const textWrapper = useRef<null | HTMLDivElement>(null);
+  const [animationPlayState, setAnimationPlayState] = useState<undefined | "running" | "paused">(undefined);
   useEffect(() => {
     const mouseOutHandler = function () {
       setAnimationPlayState("running");
@@ -13,17 +13,17 @@ export const useAnimationPlayState = () => {
     const mouseInHandler = function () {
       setAnimationPlayState("paused");
     };
-    textWrapper.current.addEventListener("mouseenter", mouseInHandler);
-    textWrapper.current.addEventListener("mouseleave", mouseOutHandler);
+    textWrapper.current?.addEventListener("mouseenter", mouseInHandler);
+    textWrapper.current?.addEventListener("mouseleave", mouseOutHandler);
     return () => {
-      textWrapper.current.removeEventListener("mouseenter", mouseInHandler);
-      textWrapper.current.removeEventListener("mouseleave", mouseOutHandler);
+      textWrapper.current?.removeEventListener("mouseenter", mouseInHandler);
+      textWrapper.current?.removeEventListener("mouseleave", mouseOutHandler);
     };
   }, []);
   return { textWrapper, animationPlayState };
 };
 
-let keyFrames = (DYNAMIC_VALUE, DIRECTION) => {
+let keyFrames = (DYNAMIC_VALUE: number, DIRECTION: string) => {
   if (DYNAMIC_VALUE < 0) {
     return `
       @-webkit-keyframes dynamicMarqueeAnimation${DYNAMIC_VALUE + DIRECTION} {
@@ -80,18 +80,18 @@ let keyFrames = (DYNAMIC_VALUE, DIRECTION) => {
     `;
 };
 
-export const useAnimationDuration = (speed, direction) => {
+export const useAnimationDuration = (speed: number, direction: string) => {
   const textElem = useRef(null);
-  const dynamicStyle = useRef(null);
-  const [animationName, setAnimationName] = useState(undefined);
-  const [animationDuration, setAnimationDuration] = useState(undefined);
+  const dynamicStyle = useRef<null | HTMLStyleElement>(null);
+  const [animationName, setAnimationName] = useState<undefined | string>(undefined);
+  const [animationDuration, setAnimationDuration] = useState<undefined | string>(undefined);
 
   useEffect(() => {
     dynamicStyle.current = document.createElement("style")
     dynamicStyle.current.type = "text/css";
-    document.querySelector("head").append(dynamicStyle.current);
+    document.querySelector("head")!.append(dynamicStyle.current);
     return () => {
-      dynamicStyle.current.remove();
+      dynamicStyle.current!.remove();
     };
   }, []);
 
@@ -100,7 +100,7 @@ export const useAnimationDuration = (speed, direction) => {
       const marqueeSpeed = speed || 1;
       const isVertical = VERTICAL_VALUE.includes(direction);
       const dimension =
-        textElem.current[isVertical ? "clientHeight" : "clientWidth"] +
+        textElem.current![isVertical ? "clientHeight" : "clientWidth"] +
         (isVertical ? 0 : 40);
       const DYNAMIC_VALUE = NEGATIVE_VALUE.includes(direction)
         ? -dimension

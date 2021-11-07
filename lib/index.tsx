@@ -1,14 +1,19 @@
-import PropTypes from "prop-types";
-import React, { useEffect, useRef } from "react";
+import React, { CSSProperties, useEffect, useRef } from "react";
 
-let generateCSS = ({ time, direction }) => {
+let generateCSS = ({
+  time,
+  direction,
+}: {
+  time: number;
+  direction: string;
+}) => {
   return `
     @keyframes dynamicMarqueeAnimation-left-right {
       from {
         transform: translateX(-50%);
       }
       to {
-        transform: translateX(0);
+        transform: translateX(0); 
       }
     }
 
@@ -90,24 +95,37 @@ let generateCSS = ({ time, direction }) => {
   `;
 };
 
-function Marquee({ speed = 2, direction = "right-left", style, children }) {
-  const marqueeRef = useRef();
+export interface MarqueeProps {
+  speed?: number;
+  style?: CSSProperties;
+  direction?: "left-right" | "right-left" | "top-bottom" | "bottom-top";
+}
+
+const Marquee: React.FC<MarqueeProps> = ({
+  speed = 2,
+  direction = "right-left",
+  style,
+  children,
+}) => {
+  const marqueeRef = useRef<null | HTMLDivElement>(null);
   const isVertical = direction === "top-bottom" || direction === "bottom-top";
 
   useEffect(() => {
-    let dynamicStyle;
     const isVertical = direction === "top-bottom" || direction === "bottom-top";
     const displacement = isVertical
-      ? marqueeRef.current.getBoundingClientRect().height
-      : marqueeRef.current.getBoundingClientRect().width;
-    dynamicStyle = document.createElement("style");
+      ? marqueeRef.current!.getBoundingClientRect().height
+      : marqueeRef.current!.getBoundingClientRect().width;
+    const dynamicStyle = document.createElement("style");
     dynamicStyle.type = "text/css";
     const time = (displacement / speed) * 0.1;
 
     if (dynamicStyle) {
       dynamicStyle.innerHTML = generateCSS({ time, direction });
     }
-    document.querySelector("head").append(dynamicStyle);
+    document.querySelector("head")!.append(dynamicStyle);
+    return () => {
+      dynamicStyle!.remove();
+    };
   }, []);
 
   return (
@@ -132,18 +150,6 @@ function Marquee({ speed = 2, direction = "right-left", style, children }) {
       </div>
     </div>
   );
-}
-
-Marquee.propTypes = {
-  speed: PropTypes.number,
-  direction: PropTypes.oneOf([
-    "left-right",
-    "right-left",
-    "top-bottom",
-    "bottom-top",
-  ]),
-  children: PropTypes.element.isRequired,
-  style: PropTypes.object,
 };
 
 export default Marquee;
