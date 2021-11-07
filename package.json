@@ -4,7 +4,7 @@
   "description": "Marquee build with React and CSS animation",
   "main": "./build/index.js",
   "scripts": {
-    "build:typescript": "tsc",
+    "build:typescript": "tsc && npm pack",
     "build:webpack": "webpack",
     "build:rollup": "rollup -c",
     "start": "rollup -c -w"
