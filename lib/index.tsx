@@ -124,7 +124,7 @@ const Marquee: React.FC<MarqueeProps> = ({
     }
     document.querySelector("head")!.append(dynamicStyle);
     return () => {
-      dynamicStyle!.remove();
+      dynamicStyle?.remove();
     };
   }, []);
 
@@ -134,19 +134,10 @@ const Marquee: React.FC<MarqueeProps> = ({
       style={isVertical ? { ...style, ...{ height: "auto" } } : { ...style }}
     >
       <div className={`react-simple-marquee__marquee-wrapper ${direction}`}>
-        <div
-          style={{ border: "1px solid red" }}
-          className="react-simple-marquee__marquee-elem"
-          ref={marqueeRef}
-        >
+        <div className="react-simple-marquee__marquee-elem" ref={marqueeRef}>
           {children}
         </div>
-        <div
-          style={{ border: "1px solid blue" }}
-          className="react-simple-marquee__marquee-elem"
-        >
-          {children}
-        </div>
+        <div className="react-simple-marquee__marquee-elem">{children}</div>
       </div>
     </div>
   );
