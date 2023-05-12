@@ -1,6 +1,6 @@
 {
   "name": "react-simple-marquee",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "description": "Marquee build with React and CSS animation",
   "main": "./build/index.js",
   "scripts": {
